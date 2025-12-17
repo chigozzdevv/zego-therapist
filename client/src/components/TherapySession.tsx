@@ -87,37 +87,64 @@ export const TherapySession = ({ sessionId, onSessionUpdate, onNewSession }: The
     }
   }
 
+  // Show clean centered UI when not connected and no messages
+  if (!isConnected && messages.length === 0) {
+    return (
+      <div className="flex flex-col h-full bg-black">
+        <audio id="ai-audio-output" autoPlay style={{ display: 'none' }} />
+        
+        <div className="flex-1 flex flex-col items-center justify-center text-center px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <div className="w-24 h-24 bg-gradient-to-br from-purple-600 to-purple-700 rounded-full flex items-center justify-center mb-8 mx-auto">
+              <Heart className="w-12 h-12 text-white" />
+            </div>
+            
+            <h2 className="text-3xl font-semibold mb-4">Welcome to Your Safe Space</h2>
+            <p className="text-gray-400 mb-10 max-w-md">
+              A judgment-free zone where you can express yourself freely.
+            </p>
+            
+            <button
+              onClick={handleStartSession}
+              disabled={isLoading}
+              className="px-8 py-4 bg-purple-600 hover:bg-purple-700 disabled:opacity-50 rounded-full transition-colors flex items-center space-x-3 mx-auto text-lg font-medium"
+            >
+              <Phone className="w-5 h-5" />
+              <span>{isLoading ? 'Starting...' : 'Start Session'}</span>
+            </button>
+            
+
+          </motion.div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="flex flex-col h-full bg-black">
       <audio id="ai-audio-output" autoPlay style={{ display: 'none' }} />
 
-      {/* Session Status */}
-      <div className="bg-gray-900 border-b border-gray-800 px-6 py-3">
+      {/* Session Status - only show when connected */}
+      <div className="bg-gray-900/50 border-b border-gray-800 px-6 py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className={`w-3 h-3 rounded-full ${isConnected ? 'bg-green-400' : 'bg-gray-600'}`} />
+            <div className={`w-3 h-3 rounded-full ${isConnected ? 'bg-green-400 animate-pulse' : 'bg-gray-600'}`} />
             <span className={`text-sm ${getStatusColor()}`}>
               {getStatusText()}
             </span>
           </div>
           
-          {isConnected ? (
+          {isConnected && (
             <button
               onClick={handleEndSession}
               disabled={isLoading}
-              className="px-4 py-2 bg-red-600 hover:bg-red-700 disabled:opacity-50 rounded-lg transition-colors flex items-center space-x-2"
+              className="px-4 py-2 bg-red-600/80 hover:bg-red-600 disabled:opacity-50 rounded-lg transition-colors flex items-center space-x-2"
             >
               <PhoneOff className="w-4 h-4" />
               <span>End Session</span>
-            </button>
-          ) : (
-            <button
-              onClick={handleStartSession}
-              disabled={isLoading}
-              className="px-4 py-2 bg-purple-600 hover:bg-purple-700 disabled:opacity-50 rounded-lg transition-colors flex items-center space-x-2"
-            >
-              <Phone className="w-4 h-4" />
-              <span>{isLoading ? 'Starting...' : 'Start Session'}</span>
             </button>
           )}
         </div>
@@ -125,7 +152,7 @@ export const TherapySession = ({ sessionId, onSessionUpdate, onNewSession }: The
 
       {/* Messages Area */}
       <div className="flex-1 overflow-y-auto px-6 py-6">
-        {messages.length === 0 && (
+        {messages.length === 0 && isConnected && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -134,31 +161,10 @@ export const TherapySession = ({ sessionId, onSessionUpdate, onNewSession }: The
             <div className="w-20 h-20 bg-gradient-to-br from-purple-600 to-purple-700 rounded-full flex items-center justify-center mb-6">
               <Heart className="w-10 h-10 text-white" />
             </div>
-            <h2 className="text-2xl font-semibold mb-4">
-              {isConnected ? 'How are you feeling today?' : 'Welcome to Your Safe Space'}
-            </h2>
-            <p className="text-gray-400 mb-8 max-w-md">
-              {isConnected 
-                ? 'Share what\'s on your mind. I\'m here to listen and support you.'
-                : 'This is a judgment-free zone where you can express yourself freely. Start a session when you\'re ready to talk.'
-              }
+            <h2 className="text-2xl font-semibold mb-4">How are you feeling today?</h2>
+            <p className="text-gray-400 max-w-md">
+              Share what's on your mind. I'm here to listen and support you.
             </p>
-            {!isConnected && (
-              <div className="space-y-3 text-sm text-gray-500 mb-8">
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-purple-500 rounded-full" />
-                  <span>Voice conversations with empathetic AI</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-purple-500 rounded-full" />
-                  <span>Complete privacy and confidentiality</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-purple-500 rounded-full" />
-                  <span>Available 24/7 whenever you need support</span>
-                </div>
-              </div>
-            )}
           </motion.div>
         )}
 

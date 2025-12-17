@@ -1,6 +1,9 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-purple-600: #9333ea;
+  --color-purple-700: #7c3aed;
+}
 
 * {
   box-sizing: border-box;

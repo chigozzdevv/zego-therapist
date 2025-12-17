@@ -75,40 +75,7 @@ function App() {
 
         {/* Main Content */}
         <div className="flex-1 flex flex-col">
-          {/* Header */}
-          <div className="bg-gray-900 border-b border-gray-800 p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-purple-700 rounded-full flex items-center justify-center">
-                  <Heart className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <h1 className="text-xl font-semibold">AI Therapist</h1>
-                  <p className="text-sm text-gray-400">Your personal mental health companion</p>
-                </div>
-              </div>
-              
-              <div className="flex items-center space-x-2">
-                <button
-                  onClick={() => {
-                    refreshConversations()
-                    setShowHistory(!showHistory)
-                  }}
-                  className="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors flex items-center space-x-2"
-                >
-                  <History className="w-4 h-4" />
-                  <span>History</span>
-                </button>
-                
-                <button
-                  onClick={handleNewSession}
-                  className="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg transition-colors font-medium"
-                >
-                  New Session
-                </button>
-              </div>
-            </div>
-          </div>
+
 
           {/* Therapy Session */}
           <div className="flex-1">
