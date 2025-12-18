@@ -11,6 +11,7 @@ export class ZegoService {
   private localStream: any = null
   private isJoining = false
   private audioElement: HTMLAudioElement | null = null
+  private publishingResolve: (() => void) | null = null
 
   static getInstance(): ZegoService {
     if (!ZegoService.instance) {
@@ -161,6 +162,10 @@ export class ZegoService {
 
     this.zg.on('publisherStateUpdate', (result: any) => {
       console.log('📤 Publisher state update:', result)
+      if (result.state === 'PUBLISHING' && this.publishingResolve) {
+        this.publishingResolve()
+        this.publishingResolve = null
+      }
     })
 
     this.zg.on('playerStateUpdate', (result: any) => {
@@ -224,11 +229,28 @@ export class ZegoService {
         const streamId = `${userId}_stream`
         
         console.log('📤 Publishing stream:', streamId)
+        
+        // Create a promise that resolves when publishing is complete
+        const publishingPromise = new Promise<void>((resolve) => {
+          this.publishingResolve = resolve
+          // Timeout fallback after 5 seconds
+          setTimeout(() => {
+            if (this.publishingResolve) {
+              console.log('⚠️ Publishing timeout, continuing anyway')
+              this.publishingResolve()
+              this.publishingResolve = null
+            }
+          }, 5000)
+        })
+        
         await this.zg.startPublishingStream(streamId, localStream, {
           enableAutoSwitchVideoCodec: true
         })
         
-        console.log('✅ Room joined successfully')
+        // Wait for PUBLISHING state
+        await publishingPromise
+        
+        console.log('✅ Room joined and stream published successfully')
         return true
       } else {
         throw new Error('Failed to create local stream')

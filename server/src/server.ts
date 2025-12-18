@@ -121,7 +121,8 @@ async function registerAgent(): Promise<string> {
   
   const result = await makeZegoRequest('RegisterAgent', agentConfig)
   if (result.Code !== 0) {
-    throw new Error(`RegisterAgent failed: ${result.Code} ${result.Message}`)
+    console.error('RegisterAgent failed:', result)
+    throw new Error(`RegisterAgent failed: Code ${result.Code} - ${result.Message}`)
   }
   
   REGISTERED_AGENT_ID = agentId
@@ -174,7 +175,12 @@ app.post('/api/start', async (req: Request, res: Response): Promise<void> => {
     const result = await makeZegoRequest('CreateAgentInstance', instanceConfig)
     
     if (result.Code !== 0) {
-      res.status(400).json({ error: result.Message || 'Failed to create instance' })
+      console.error('CreateAgentInstance failed:', result)
+      res.status(400).json({ 
+        error: result.Message || 'Failed to create instance',
+        code: result.Code,
+        details: result
+      })
       return
     }
     
