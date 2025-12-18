@@ -4,7 +4,7 @@ import { TherapySession } from './components/TherapySession'
 import { SessionHistory } from './components/SessionHistory'
 import { memoryService } from './services/memory'
 import type { ConversationMemory } from './types'
-import { Heart, History, X } from 'lucide-react'
+import { X } from 'lucide-react'
 
 function App() {
   const [currentSessionId, setCurrentSessionId] = useState<string | undefined>()
@@ -16,10 +16,7 @@ function App() {
     setConversations(allConversations)
   }, [])
 
-  const handleNewSession = useCallback(() => {
-    setCurrentSessionId(undefined)
-    setShowHistory(false)
-  }, [])
+
 
   const handleSelectSession = useCallback((id: string) => {
     setCurrentSessionId(id)
