@@ -72,7 +72,7 @@ async function registerAgent(): Promise<string> {
     Name: 'AI Therapist',
     LLM: {
       Url: 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions',
-      ApiKey: CONFIG.DASHSCOPE_API_KEY || 'zego_test',
+      ApiKey: 'zego_test',
       Model: 'qwen-plus',
       SystemPrompt: 'You are a compassionate AI therapist. Listen actively, ask thoughtful questions, and provide supportive guidance. Use empathetic language and validate emotions. Keep responses conversational and under 100 words for natural voice flow. Focus on helping users explore their feelings and find their own solutions.',
       Temperature: 0.8,
