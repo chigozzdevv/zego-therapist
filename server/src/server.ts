@@ -51,14 +51,18 @@ async function makeZegoRequest(action: string, body: object = {}): Promise<any> 
   
   const url = `${CONFIG.ZEGO_API_BASE_URL}?${queryString}`
   
+  console.log(`📡 ZEGO API Request: ${action}`)
+  console.log('📤 Request body:', JSON.stringify(body, null, 2))
+  
   try {
     const response = await axios.post(url, body, {
       headers: { 'Content-Type': 'application/json' },
       timeout: 30000
     })
+    console.log(`✅ ZEGO API Response for ${action}:`, JSON.stringify(response.data, null, 2))
     return response.data
   } catch (error: any) {
-    console.error('ZEGO API Error:', error.response?.data || error.message)
+    console.error(`❌ ZEGO API Error for ${action}:`, error.response?.data || error.message)
     throw error
   }
 }
