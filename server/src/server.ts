@@ -75,47 +75,44 @@ async function registerAgent(): Promise<string> {
     AgentId: agentId,
     Name: 'AI Therapist',
     LLM: {
-      Url: 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions',
+      Url: 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions',
       ApiKey: 'zego_test',
       Model: 'qwen-plus',
       SystemPrompt: 'You are a compassionate AI therapist. Listen actively, ask thoughtful questions, and provide supportive guidance. Use empathetic language and validate emotions. Keep responses conversational and under 100 words for natural voice flow. Focus on helping users explore their feelings and find their own solutions.',
-      Temperature: 0.8,
+      Temperature: 0.7,
       TopP: 0.9,
       Params: { 
-        max_tokens: 250
+        max_tokens: 200
       }
     },
     TTS: {
-      Vendor: 'CosyVoice',
+      Vendor: 'ByteDance',
       Params: {
-        app: { 
-          api_key:'zego_test'
+        app: {
+          appid: 'zego_test',
+          token: 'zego_test',
+          cluster: 'volcano_tts'
         },
-        payload: {
-          model: 'cosyvoice-v2',
-          parameters: {
-            voice: 'longxiaochun_v2',
-            speed: 1.0,
-            volume: 0.8
-          }
+        speed_ratio: 1,
+        volume_ratio: 1,
+        pitch_ratio: 1,
+        audio: {
+          rate: 24000
         }
       },
       FilterText: [
-        {
-          BeginCharacters: '(',
-          EndCharacters: ')'
-        },
-        {
-          BeginCharacters: '[',
-          EndCharacters: ']'
-        }
+        { BeginCharacters: '(', EndCharacters: ')' },
+        { BeginCharacters: '[', EndCharacters: ']' }
       ]
     },
     ASR: {
-      HotWord: 'ZEGOCLOUD|10,AI|8,Assistant|8,money|10,help|8',
-      // Better ASR settings for complete sentence capture
-      VADSilenceSegmentation: 1500,  // Wait 1.5 seconds of silence before ending
-      PauseInterval: 2000  // Concatenate speech within 2 seconds
+      Vendor: 'Tencent',
+      Params: {
+        engine_model_type: '16k_en',
+        hotword_list: 'therapist|10,feelings|8,emotions|8,support|8,help|8'
+      },
+      VADSilenceSegmentation: 1500,
+      PauseInterval: 2000
     }
   }
   
